@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:simple_cryptotrading_app/Overview.dart';
 import 'data.dart';
-import 'apiconn.dart';
+
 
 
 void main() {
@@ -19,6 +20,8 @@ class Homepage extends StatelessWidget {
     String Balance = balance.toString();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: (){}, icon:Icon(Icons.menu, color: Colors.black)),
+        backgroundColor: Colors.transparent,
         title: Row(
           children: [
             Text('Barya Tuko'),
@@ -87,7 +90,7 @@ class Homepage extends StatelessWidget {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        getdata();
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Overview()));
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.transparent,
@@ -167,17 +170,11 @@ class Homepage extends StatelessWidget {
                                             children: [
                                               Image.asset('assets/bitcoin.png',height: 40,),
                                               SizedBox(width: 10,),
-                                              Text('Bitcoin'),
+                                              Text('Bitcoin : PHP 0'),
                                             ],
                                           ),
                                           SizedBox(height: 20,),
-                                          Row(
-                                            children: [
-                                              Image.asset('assets/etherium.png',height: 40,),
-                                              SizedBox(width: 10,),
-                                              Text('Ethereum'),
-                                            ],
-                                          ),
+
                                         ],
                                       ),
                                     )
