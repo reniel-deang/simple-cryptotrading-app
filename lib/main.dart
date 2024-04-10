@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'data.dart';
+import 'apiconn.dart';
 
 
 void main() {
@@ -12,8 +13,8 @@ void main() {
 
 class Homepage extends StatelessWidget {
   const Homepage({Key? key}) : super(key: key);
-
   @override
+
   Widget build(BuildContext context) {
     String Balance = balance.toString();
     return Scaffold(
@@ -85,7 +86,9 @@ class Homepage extends StatelessWidget {
                                       color: Color.fromRGBO(27, 27, 27, 1),
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        getdata();
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.transparent,
                                         elevation: 0,
