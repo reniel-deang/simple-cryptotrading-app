@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'data.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -12,11 +13,12 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String Balance = balance.toString();
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: [
-            Text('Portfolio'),
+            Text('Barya Tuko'),
           ],
         ),
       ),
@@ -63,7 +65,7 @@ class Homepage extends StatelessWidget {
                             ),
                             Text('Total balance', style: TextStyle(color: Colors.grey),),
                             Text(
-                              '₱ 7,466.20',
+                              Balance,
                               style: TextStyle(color: Colors.black, fontSize: 30),
                             ),
 
