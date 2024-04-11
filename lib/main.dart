@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:simple_cryptotrading_app/Overview.dart';
+import 'package:simple_cryptotrading_app/welcome.dart';
 import 'data.dart';
 import 'buyeth.dart';
 import 'buybtc.dart';
@@ -12,7 +13,7 @@ import 'selleth.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Homepage(),
+    home: WelcomePage(),
     debugShowCheckedModeBanner: false,
   ));
 }
