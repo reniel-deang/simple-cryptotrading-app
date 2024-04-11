@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:simple_cryptotrading_app/Overview.dart';
 import 'data.dart';
+import 'buyeth.dart';
+import 'buybtc.dart';
+import 'sellbtc.dart';
+import 'selleth.dart';
+
 
 
 
@@ -80,17 +85,83 @@ class Homepage extends StatelessWidget {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center, // Change to center
                                 children: [
+
                                   Container(
                                     width: 150,
                                     height: 50,
-                                    margin: EdgeInsets.only(right: 20), // Add margin to the right
+                                    margin: EdgeInsets.only(right: 20),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color: Color.fromRGBO(27, 27, 27, 1),
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Overview()));
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('What do you want to buy?'),
+                                              //content: Text('Are you sure you want to buy crypto?'),
+                                              actions: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => BuyBTCPage()));
+                                                              },
+                                                              child: Row(
+                                                                children: [
+                                                                  Image.asset('assets/bitcoin.png', height: 40,),
+                                                                  SizedBox(width: 5,),
+                                                                  Text('BTC')
+                                                                ],
+                                                              )
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => BuyETHPage()));
+                                                              },
+                                                              child: Row(
+                                                                children: [
+                                                                  Image.asset('assets/etherium.png', height: 40,),
+                                                                  SizedBox(width: 5,),
+                                                                  Text('ETH')
+                                                                ],
+                                                              )
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(height: 20,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Cancel'),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.transparent,
@@ -100,11 +171,13 @@ class Homepage extends StatelessWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        'Buy',
+                                        'BUY',
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
                                   ),
+
+
                                   Container(
                                     width: 150,
                                     height: 50,
@@ -114,7 +187,78 @@ class Homepage extends StatelessWidget {
                                       color: Color.fromRGBO(27, 27, 27, 1),
                                     ),
                                     child: ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('What do you want to sell?'),
+                                              //content: Text('Are you sure you want to buy crypto?'),
+                                              actions: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => SellBTCPage()));
+                                                              },
+                                                              child: Row(
+                                                                children: [
+                                                                  Image.asset('assets/bitcoin.png', height: 40,),
+                                                                  SizedBox(width: 5,),
+                                                                  Text('BTC')
+                                                                ],
+                                                              )
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+
+                                                    Container(
+                                                      child: Row(
+                                                        children: [
+                                                          ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => SellETHPage()));
+                                                              },
+                                                              child: Row(
+                                                                children: [
+                                                                  Image.asset('assets/etherium.png', height: 40,),
+                                                                  SizedBox(width: 5,),
+                                                                  Text('ETH')
+                                                                ],
+                                                              )
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+
+
+                                                  ],
+                                                ),
+
+                                                SizedBox(height: 20,),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Cancel'),
+                                                    ),
+                                                  ],
+                                                ),
+
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.transparent,
                                         elevation: 0,
@@ -123,14 +267,14 @@ class Homepage extends StatelessWidget {
                                         ),
                                       ),
                                       child: Text(
-                                        'Sell',
+                                        'SELL',
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     ),
                                   ),
                                 ],
                               ),
-                            )
+                            ),
 
 
                           ],
