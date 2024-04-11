@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 String? crypto = "bitcoin";
 String? currency = "php";
 bool? day_vol = true;
-String?day = "5";
+String?day = "365";
 String? presion = "full";
 final String apikey = "CG-j9k6XsDnbYo6kCzPjE1WiHWc";
 

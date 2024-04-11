@@ -167,7 +167,19 @@ class _OverviewState extends State<Overview> {
                             .map<double>((e) => e[1] as double)
                             .reduce((a, b) => a > b ? a : b),
                         titlesData: FlTitlesData(
-                          leftTitles: SideTitles(showTitles: false),
+                          leftTitles: SideTitles(
+                            showTitles: true,
+                            interval: 1000000,
+                            getTextStyles: (value) => const TextStyle(color: Colors.black, fontSize: 12),
+                            getTitles: (value) {
+                              // Convert value to millions format
+                              if (value >= 1000000) {
+                                return '${(value ~/ 1000000)}M';
+                              } else {
+                                return '\$${(value ~/ 1000)}K';
+                              }
+                            },
+                          ),
                           bottomTitles: SideTitles(showTitles: false),
                         ),
                         gridData: FlGridData(show: true),
@@ -181,11 +193,17 @@ class _OverviewState extends State<Overview> {
                               ),
                             ),
                             isCurved: false,
-                            colors: [Colors.blue],
+                            colors: [
+                              Colors.green.withOpacity(0.5), // Set the line color to green with opacity
+                            ],
                             barWidth: 2,
                             isStrokeCapRound: true,
                             belowBarData: BarAreaData(
-                              show: false,
+                              show: true,
+                              colors: [Colors.green.withOpacity(0.3)], // Set the fill color to green with opacity
+                            ),
+                            dotData: FlDotData(
+                              show: false, // Hide the dots
                             ),
                           ),
                         ],
