@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
+import 'package:simple_cryptotrading_app/buybtc.dart';
+import 'package:simple_cryptotrading_app/buyeth.dart';
+import 'package:simple_cryptotrading_app/sellbtc.dart';
+import 'package:simple_cryptotrading_app/selleth.dart';
 import 'dart:convert';
 import 'apiconn.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +18,7 @@ class Overview extends StatefulWidget {
 
 class _OverviewState extends State<Overview> {
   late List<List<dynamic>> prices = [];
+
 
   @override
   void initState() {
@@ -49,7 +54,23 @@ class _OverviewState extends State<Overview> {
     }
     catch(e)
     {
-      print("Error");
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Connecting error'),
+            content: Text('Please check your internet and try again. '),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
 
   }
@@ -100,7 +121,7 @@ class _OverviewState extends State<Overview> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "BTC-" + currency.toString().toUpperCase(),
+                    "$currency_name",
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 20,
@@ -111,7 +132,7 @@ class _OverviewState extends State<Overview> {
                     width: 20,
                   ),
                   Text(
-                    "Bitcoin $currency",
+                    "$currency_shortcut $currency",
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 14,
@@ -160,25 +181,68 @@ class _OverviewState extends State<Overview> {
                       LineChartData(
                         minX: 0,
                         maxX: prices.length.toDouble(),
-                        minY: prices
-                            .map<double>((e) => e[1] as double)
-                            .reduce((a, b) => a < b ? a : b),
+                        minY: 0,
                         maxY: prices
                             .map<double>((e) => e[1] as double)
                             .reduce((a, b) => a > b ? a : b),
+                        lineTouchData: LineTouchData(
+                          touchTooltipData: LineTouchTooltipData(
+                            tooltipBgColor: Colors.blueAccent.withOpacity(0.8),
+                            tooltipRoundedRadius: 8,
+                            getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                              // List to hold the tooltip items
+                              final List<LineTooltipItem> tooltipItems = [];
+
+                              // Loop through each touched spot
+                              for (final spot in touchedSpots) {
+                                // Get the corresponding price data
+                                final price = spot.y;
+
+                                // Get the corresponding date data
+                                final dateString = prices[spot.x!.toInt()][0];
+                                final date = DateTime.parse(dateString);
+
+                                // Format the date
+                                final formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+                                // Add tooltip item with value and date
+                                tooltipItems.add(
+                                  LineTooltipItem(
+                                    '\₱${price.toStringAsFixed(2)}\n$formattedDate',
+                                    const TextStyle(color: Colors.white),
+                                  ),
+                                );
+                              }
+
+                              return tooltipItems;
+                            },
+                          ),
+                          touchCallback: (LineTouchResponse touchResponse) {},
+                          // Other touch data configurations...
+                        ),
+                        // Other chart configurations...
                         titlesData: FlTitlesData(
                           leftTitles: SideTitles(
                             showTitles: true,
-                            interval: 1000000,
-                            getTextStyles: (value) => const TextStyle(color: Colors.black, fontSize: 12),
+                            getTextStyles: (value) => TextStyle(color: Colors.black, fontSize: 12),
                             getTitles: (value) {
-                              // Convert value to millions format
-                              if (value >= 1000000) {
-                                return '${(value ~/ 1000000)}M';
-                              } else {
-                                return '\$${(value ~/ 1000)}K';
+                              // Convert value to millions or thousands format
+                              if (currency_name == "BITCOIN") {
+                                if (value >= 1000000) {
+                                  return '\₱${(value ~/ 1000000)}M';
+                                } else {
+                                  return '\₱${(value ~/ 1000)}';
+                                }
+                              } else if (currency_name == "ETHEREUM") {
+                                if (value >= 1000000) {
+                                  return '${(value ~/ 100000)}K';
+                                } else {
+                                  return '${(value ~/ 1000)}K';
+                                }
                               }
+                              return ''; // Default empty string if currency_name is neither BITCOIN nor ETHEREUM
                             },
+                            interval: currency_name == "BITCOIN" ? 1000000 : 50000, // Set interval based on currency_name
                           ),
                           bottomTitles: SideTitles(showTitles: false),
                         ),
@@ -192,7 +256,7 @@ class _OverviewState extends State<Overview> {
                                 prices[index][1] as double,
                               ),
                             ),
-                            isCurved: false,
+                            isCurved: true,
                             colors: [
                               Colors.green.withOpacity(0.5), // Set the line color to green with opacity
                             ],
@@ -234,7 +298,7 @@ class _OverviewState extends State<Overview> {
                       color: Colors.black54,
                       fontSize: 20,
                       fontWeight: FontWeight.w900,),),
-                    Text("20 132,111", style: TextStyle(
+                    Text("$market_cap", style: TextStyle(
                       color: Colors.black,
                       fontSize: 20,
                       fontWeight: FontWeight.w900,),),
@@ -242,64 +306,71 @@ class _OverviewState extends State<Overview> {
                 ),
               ),
 
-              SizedBox(height: 60,),
-              SizedBox(height: 60,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center, // Change to center
-                children: [
-                  Container(
-                    width: 150,
-                    height: 50,
-                    margin: EdgeInsets.only(right: 20), // Add margin to the right
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color.fromRGBO(27, 27, 27, 1),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        'Buy',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 150,
-                    height: 50,
-                    margin: EdgeInsets.only(left: 20), // Add margin to the left
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color.fromRGBO(27, 27, 27, 1),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        'Sell',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ],
+              SizedBox(height: 3,),
+              Container(
+                padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("24 Hour Trading Vol", style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,),),
+                    Text("$volume", style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,),),
+                  ],
+                ),
               ),
+              SizedBox(height: 5,),
+
 
               // Other widgets...
             ],
           ),
         ),
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: 'Buy',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.monetization_on),
+            label: 'Sell',
+          ),
+        ],
+        backgroundColor: Color.fromRGBO(27, 27, 27, 1),
+        selectedItemColor: Colors.grey,
+        unselectedItemColor: Colors.grey,
+        onTap: (index) {
+          if (index == 0) { // Check if the "Buy" button is pressed
+            if(currency_name == "BITCOIN")
+              {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BuyBTCPage()));
+              }
+            else
+              {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BuyETHPage()));
+              }
+
+          }
+          else
+            {
+              if(currency_name == "BITCOIN")
+              {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SellBTCPage()));
+              }
+              else
+              {
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SellETHPage()));
+              }
+
+            }
+        },
       ),
     );
   }

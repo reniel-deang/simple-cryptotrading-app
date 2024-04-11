@@ -1,1 +1,1 @@
-double? balance = 0;
+double? balance = 6005974.65;

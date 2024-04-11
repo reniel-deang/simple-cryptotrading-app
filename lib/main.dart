@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:simple_cryptotrading_app/Overview.dart';
-import 'package:simple_cryptotrading_app/welcome.dart';
+import 'package:simple_cryptotrading_app/apiconn.dart';
 import 'data.dart';
 import 'buyeth.dart';
 import 'buybtc.dart';
@@ -13,7 +13,7 @@ import 'selleth.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: WelcomePage(),
+    home: Homepage(),
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -113,7 +113,10 @@ class Homepage extends StatelessWidget {
                                                         children: [
                                                           ElevatedButton(
                                                               onPressed: () {
-                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => BuyBTCPage()));
+                                                                currency_name = "BITCOIN";
+                                                                currency_shortcut = "BTC";
+                                                                crypto = "bitcoin";
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
                                                               },
                                                               child: Row(
                                                                 children: [
@@ -132,7 +135,10 @@ class Homepage extends StatelessWidget {
                                                         children: [
                                                           ElevatedButton(
                                                               onPressed: () {
-                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => BuyETHPage()));
+                                                                currency_name = "ETHEREUM";
+                                                                currency_shortcut = "ETH";
+                                                                crypto = "ethereum";
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
                                                               },
                                                               child: Row(
                                                                 children: [
