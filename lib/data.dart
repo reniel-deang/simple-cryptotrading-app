@@ -1,2 +1,2 @@
-double balance = 6005974.65;
-double ownbitcoin = 0;
+double balance = 100000;
+double ownbitcoin = 0.4545454;

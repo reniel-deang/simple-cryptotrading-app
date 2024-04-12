@@ -18,13 +18,6 @@ String? currency_name;
 String? currency_shortcut;
 
 
-
-var millis = 1712361600000;
-var dt = DateTime.fromMillisecondsSinceEpoch(millis);
-
-// 12 Hour format:
-var d12 = DateFormat('MM/dd/yyyy').format(dt);
-
 final String link_value  = "https://api.coingecko.com/api/v3/simple/price?ids=$crypto&&vs_currencies=$currency&&include_24hr_vol=$day_vol&&precision=$presion&&include_market_cap=true";
 
 final String historical_chart  = "https://api.coingecko.com/api/v3/coins/$crypto/market_chart?vs_currency=$currency&&days=$day&&interval=daily&&precision=2";
@@ -52,7 +45,7 @@ Future <void> getdata() async
     market_cap = fetchdata['$crypto']['php_market_cap'].toString();
     volume = fetchdata['$crypto']['php_24h_vol'].toString();
     print(fetchdata);
-    print(d12);
+
   }
   catch(e)
   {
