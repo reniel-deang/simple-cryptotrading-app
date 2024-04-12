@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:simple_cryptotrading_app/Overview.dart';
 import 'package:simple_cryptotrading_app/apiconn.dart';
 import 'data.dart';
-import 'buyeth.dart';
-import 'buybtc.dart';
 import 'sellbtc.dart';
 import 'selleth.dart';
+import 'welcome.dart';
 
 
 
 
 void main() {
   runApp(MaterialApp(
-    home: Homepage(),
+    home: WelcomePage(),
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -321,7 +319,7 @@ class Homepage extends StatelessWidget {
                                             children: [
                                               Image.asset('assets/bitcoin.png',height: 40,),
                                               SizedBox(width: 10,),
-                                              Text('Bitcoin : PHP 0'),
+                                              Text('Bitcoin :  $ownbitcoin'),
                                             ],
                                           ),
                                           SizedBox(height: 20,),

@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:simple_cryptotrading_app/main.dart';
+import 'data.dart';
+import 'apiconn.dart';
 
 class BuyBTCPage extends StatefulWidget {
   const BuyBTCPage({super.key});
@@ -11,10 +13,41 @@ class BuyBTCPage extends StatefulWidget {
   State<BuyBTCPage> createState() => _BuyBTCPageState();
 }
 
-
-
 class _BuyBTCPageState extends State<BuyBTCPage> {
   TextEditingController buybtc = TextEditingController();
+  double bitcoin_value = double.parse(value);
+  double inputbalance = balance;
+  String _result = "";
+
+  void calculate(String expression) {
+    // Check if the expression is empty
+    if (expression.isEmpty) {
+      setState(() {
+        _result = '';
+      });
+      return;
+    }
+
+    // Implement your calculation logic here
+    // For simplicity, this example evaluates the expression as a string
+    try {
+      setState(() {
+        _result = evalExpression(expression).toString();
+      });
+    } catch (e) {
+      setState(() {
+        _result = 'To Bitcoin';
+      });
+    }
+  }
+
+  double evalExpression(String expression) {
+    // Implement your expression evaluation logic here
+    // For simplicity, this example directly parses and evaluates the expression
+    double bitcoin = double.parse(expression) / bitcoin_value;
+    return double.tryParse(bitcoin.toString()) ?? 0.0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,9 +56,8 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
         centerTitle: true,
         title: Text('BUY BTC'),
       ),
-
       body: Padding(
-        padding: const EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 20),
+        padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 20),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.yellow,
@@ -40,11 +72,14 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
             ],
           ),
           child: Padding(
-            padding: const EdgeInsets.only(left: 20,right: 20,bottom: 20,top: 40),
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 40),
             child: Column(
               children: [
-                Image.asset('assets/bitcoin.png',height: 80,),
-                SizedBox(height: 15,),
+                Image.asset(
+                  'assets/bitcoin.png',
+                  height: 80,
+                ),
+                SizedBox(height: 15),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -63,34 +98,42 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
                       Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Row(
-
                           children: [
-                            Text('PHP',style: TextStyle(fontSize: 20),),
-                            SizedBox(width: 50,),
+                            Text('PHP', style: TextStyle(fontSize: 20)),
+                            SizedBox(width: 50),
                             Expanded(
                               child: TextField(
                                 textAlign: TextAlign.end,
-                                  style: TextStyle(fontSize: 20),
-                                  controller: buybtc,
-                                  keyboardType: TextInputType.phone, // Set keyboard type to phone
-                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly,
-                                    ], // Allow only digits
-                                  decoration: InputDecoration(
-                                    hintText: '10 000 max basta sagad ng pera mo',
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-                                  )
+                                style: TextStyle(fontSize: 20),
+                                controller: buybtc,
+                                keyboardType: TextInputType.phone, // Set keyboard type to phone
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly,
+                                ], // Allow only digits
+                                decoration: InputDecoration(
+                                  hintText: '$balance',
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                                ),
+                                onChanged: (value) {
+                                  // Ensure that the entered value does not exceed the input balance
+                                  if (double.parse(value) > inputbalance) {
+                                    buybtc.text = inputbalance.toStringAsFixed(2);
+                                    buybtc.selection = TextSelection.fromPosition(
+                                      TextPosition(offset: buybtc.text.length),
+                                    );
+                                    return; // Exit early if input reaches maximum balance
+                                  }
+                                  calculate(value);
+                                },
                               ),
                             ),
-
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
-
-                SizedBox(height: 20,),
+                SizedBox(height: 20),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -105,25 +148,27 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
                     ],
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 20,bottom: 20,right: 10,left: 10),
+                    padding: const EdgeInsets.only(top: 20, bottom: 20, right: 10, left: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('BTC',style: TextStyle(fontSize: 20),),
-                        Text('0.0025',style: TextStyle(fontSize: 20),)
+                        Text('BTC', style: TextStyle(fontSize: 20)),
+                        Text('$_result', style: TextStyle(fontSize: 20)),
                       ],
                     ),
                   ),
                 ),
-
-                SizedBox(height: 20,),
-
+                SizedBox(height: 20),
                 Container(
                   child: Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            balance = balance - double.parse(buybtc.text);
+                            ownbitcoin = ownbitcoin + double.parse(_result);
+                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage()));
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             elevation: 0,
@@ -135,7 +180,7 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
                               'BUY',
-                              style: TextStyle(color: Colors.white,fontSize: 20),
+                              style: TextStyle(color: Colors.white, fontSize: 20),
                             ),
                           ),
                         ),
@@ -151,4 +196,3 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
     );
   }
 }
-
