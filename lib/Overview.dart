@@ -23,9 +23,9 @@ class _OverviewState extends State<Overview> {
 
   @override
   void initState() {
-
-    super.initState();
     fetchData();
+    super.initState();
+
 
   }
 
@@ -34,7 +34,7 @@ class _OverviewState extends State<Overview> {
     try{
       await getdata();
 
-      final String historical_chart  = "https://api.coingecko.com/api/v3/coins/$crypto/market_chart?vs_currency=$currency&&days=$day&&interval=daily&&precision=2";
+      final String historical_chart  = historical_charts;
 
       final response = await http.get(Uri.parse(historical_chart));
 

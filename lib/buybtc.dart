@@ -167,11 +167,6 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
                           onPressed: () {
                             balance = balance - double.parse(buybtc.text);
                             ownbitcoin = ownbitcoin + double.parse(_result);
-                            value = "0";
-                            currency_name = "";
-                            currency = "";
-                            market_cap = "0";
-                            volume = "0";
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage()));
                           },
                           style: ElevatedButton.styleFrom(

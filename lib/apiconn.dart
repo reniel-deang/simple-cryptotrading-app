@@ -20,7 +20,7 @@ String? currency_shortcut;
 
 final String link_value  = "https://api.coingecko.com/api/v3/simple/price?ids=$crypto&&vs_currencies=$currency&&include_24hr_vol=$day_vol&&precision=$presion&&include_market_cap=true";
 
-final String historical_chart  = "https://api.coingecko.com/api/v3/coins/$crypto/market_chart?vs_currency=$currency&&days=$day&&interval=daily&&precision=2";
+final String historical_charts  = "https://api.coingecko.com/api/v3/coins/$crypto/market_chart?vs_currency=$currency&&days=$day&&interval=daily&&precision=2";
 
 final Map<String, String> headers = {
   'x_cg_demo_api_key' : apikey,
@@ -28,23 +28,23 @@ final Map<String, String> headers = {
 
 Future <void> getdata() async
 {
-  try{
+  try {
     final currencyprice = await http.get(
       Uri.parse(link_value),
       headers: headers,
     );
-
-    final currencychart = await http.get(
-      Uri.parse(historical_chart),
-      headers: headers,
-    );
-
-    final fetchdata = jsonDecode(currencyprice.body);
-
-    value = fetchdata['$crypto']['$currency'].toString();
-    market_cap = fetchdata['$crypto']['php_market_cap'].toString();
-    volume = fetchdata['$crypto']['php_24h_vol'].toString();
-    print(fetchdata);
+    if (currencyprice.statusCode == 200)
+      {
+        final fetchdata = jsonDecode(currencyprice.body);
+        value = fetchdata['$crypto']['$currency'].toString();
+        market_cap = fetchdata['$crypto']['php_market_cap'].toString();
+        volume = fetchdata['$crypto']['php_24h_vol'].toString();
+        print(fetchdata);
+      }
+   else
+     {
+       getdata();
+     }
 
   }
   catch(e)

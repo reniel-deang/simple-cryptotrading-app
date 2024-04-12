@@ -112,7 +112,7 @@ class Homepage extends StatelessWidget {
                                                       child: Row(
                                                         children: [
                                                           ElevatedButton(
-                                                              onPressed: () {
+                                                              onPressed: () async{
                                                                 currency_name = "BITCOIN";
                                                                 currency_shortcut = "BTC";
                                                                 crypto = "bitcoin";
@@ -130,27 +130,6 @@ class Homepage extends StatelessWidget {
                                                       ),
                                                     ),
 
-                                                    Container(
-                                                      child: Row(
-                                                        children: [
-                                                          ElevatedButton(
-                                                              onPressed: () {
-                                                                currency_name = "ETHEREUM";
-                                                                currency_shortcut = "ETH";
-                                                                crypto = "ethereum";
-                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
-                                                              },
-                                                              child: Row(
-                                                                children: [
-                                                                  Image.asset('assets/etherium.png', height: 40,),
-                                                                  SizedBox(width: 5,),
-                                                                  Text('ETH')
-                                                                ],
-                                                              )
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
                                                   ],
                                                 ),
                                                 SizedBox(height: 20,),
@@ -218,25 +197,6 @@ class Homepage extends StatelessWidget {
                                                                   Image.asset('assets/bitcoin.png', height: 40,),
                                                                   SizedBox(width: 5,),
                                                                   Text('BTC')
-                                                                ],
-                                                              )
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-
-                                                    Container(
-                                                      child: Row(
-                                                        children: [
-                                                          ElevatedButton(
-                                                              onPressed: () {
-                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => SellETHPage()));
-                                                              },
-                                                              child: Row(
-                                                                children: [
-                                                                  Image.asset('assets/etherium.png', height: 40,),
-                                                                  SizedBox(width: 5,),
-                                                                  Text('ETH')
                                                                 ],
                                                               )
                                                           ),
