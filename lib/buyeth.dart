@@ -56,7 +56,7 @@ class _BuyETHPageState extends State<BuyETHPage> {
       appBar: AppBar(
         toolbarHeight: 80,
         centerTitle: true,
-        title: Text('BUY BTC'),
+        title: Text('BUY ETH'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 20),
@@ -78,7 +78,7 @@ class _BuyETHPageState extends State<BuyETHPage> {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/bitcoin.png',
+                  'assets/etherium.png',
                   height: 80,
                 ),
                 SizedBox(height: 15),
@@ -154,7 +154,7 @@ class _BuyETHPageState extends State<BuyETHPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('BTC', style: TextStyle(fontSize: 20)),
+                        Text('ETH', style: TextStyle(fontSize: 20)),
                         Text('$_result', style: TextStyle(fontSize: 20)),
                       ],
                     ),

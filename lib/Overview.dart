@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'package:simple_cryptotrading_app/buybtc.dart';
 import 'package:simple_cryptotrading_app/buyeth.dart';
+import 'package:simple_cryptotrading_app/main.dart';
 import 'package:simple_cryptotrading_app/sellbtc.dart';
 import 'package:simple_cryptotrading_app/selleth.dart';
 import 'dart:convert';
@@ -64,6 +65,7 @@ class _OverviewState extends State<Overview> {
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage()));
                 },
                 child: Text('OK'),
               ),
@@ -350,10 +352,12 @@ class _OverviewState extends State<Overview> {
           if (index == 0) { // Check if the "Buy" button is pressed
             if(currency_name == "BITCOIN")
               {
+
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BuyBTCPage()));
               }
             else
               {
+
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BuyETHPage()));
               }
 
@@ -362,6 +366,7 @@ class _OverviewState extends State<Overview> {
             {
               if(currency_name == "BITCOIN")
               {
+
                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SellBTCPage()));
               }
               else
