@@ -190,7 +190,10 @@ class Homepage extends StatelessWidget {
                                                         children: [
                                                           ElevatedButton(
                                                               onPressed: () {
-                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => SellBTCPage()));
+                                                                currency_name = "BITCOIN";
+                                                                currency_shortcut = "BTC";
+                                                                crypto = "bitcoin";
+                                                                Navigator.push(context, MaterialPageRoute(builder: (context) => Overview()));
                                                               },
                                                               child: Row(
                                                                 children: [

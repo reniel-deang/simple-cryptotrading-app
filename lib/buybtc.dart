@@ -20,8 +20,8 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
   String _result = "";
 
   void calculate(String expression) {
-    // Check if the expression is empty
-    if (expression.isEmpty) {
+    // Check if the expression is empty or contains only whitespace
+    if (expression.trim().isEmpty) {
       setState(() {
         _result = '';
       });
@@ -42,6 +42,11 @@ class _BuyBTCPageState extends State<BuyBTCPage> {
   }
 
   double evalExpression(String expression) {
+    // Check if the expression is empty or contains only whitespace
+    if (expression.trim().isEmpty) {
+      return 0.0;
+    }
+
     // Implement your expression evaluation logic here
     // For simplicity, this example directly parses and evaluates the expression
     double bitcoin = double.parse(expression) / bitcoin_value;

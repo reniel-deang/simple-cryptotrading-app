@@ -16,7 +16,9 @@ class _SellBTCPageState extends State<SellBTCPage> {
   TextEditingController buybtc = TextEditingController();
   double bitcoin_value = double.parse(value ?? "0"); // Ensure value is not null
   double inputbalance = balance ?? 0; // Ensure balance is not null
+  double ownBitcoin = double.parse(ownbitcoin.toString()); // Convert ownbitcoin to double
   String _result = "";
+  double inputValue = 0;
 
   void calculate(String expression) {
     if (expression.isEmpty) {
@@ -40,6 +42,26 @@ class _SellBTCPageState extends State<SellBTCPage> {
   double evalExpression(String expression) {
     double bitcoin = double.parse(expression) * bitcoin_value;
     return double.tryParse(bitcoin.toString()) ?? 0.0;
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -102,19 +124,26 @@ class _SellBTCPageState extends State<SellBTCPage> {
                                 controller: buybtc,
                                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                                 inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,10}')),
+                                  FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,8}')),
                                 ],
                                 decoration: InputDecoration(
-                                  hintText: '${ownbitcoin ?? ""}', // Ensure ownbitcoin is not null
+                                  hintText: '$ownBitcoin', // Display ownBitcoin as hintText
                                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                                 ),
                                 onChanged: (value) {
-                                  if (double.parse(value) > inputbalance) {
-                                    buybtc.text = (ownbitcoin ?? 0).toStringAsFixed(10);
+
+                                  try {
+                                    inputValue = double.parse(value);
+                                  } catch (e) {
+                                    inputValue = 0;
+                                  }
+                                  if (inputValue > ownBitcoin) {
+                                    // Truncate the input to match precision of ownBitcoin
+                                    inputValue = ownBitcoin;
+                                    buybtc.text = inputValue.toStringAsFixed(8);
                                     buybtc.selection = TextSelection.fromPosition(
                                       TextPosition(offset: buybtc.text.length),
                                     );
-                                    return;
                                   }
                                   calculate(value);
                                 },
@@ -158,8 +187,18 @@ class _SellBTCPageState extends State<SellBTCPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            balance = (balance ?? 0) - double.parse(buybtc.text);
-                            ownbitcoin = (ownbitcoin ?? 0) + double.parse(_result);
+                            if (buybtc.text.isEmpty) {
+                              _showErrorDialog("Please enter a valid amount.");
+                              return;
+                            }
+                            double inputValue = double.parse(buybtc.text);
+                            if (inputValue > ownBitcoin || inputValue <= 0) {
+                              _showErrorDialog("Invalid input. Please enter a valid amount.");
+                              return;
+                            }
+                            double btcToSell = inputValue;
+                            balance = balance + double.parse(_result);
+                            ownbitcoin = ownbitcoin - inputValue; // Update ownBitcoin
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage()));
                           },
                           style: ElevatedButton.styleFrom(
